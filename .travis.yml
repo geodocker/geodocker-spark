@@ -1,0 +1,32 @@
+sudo: required
+language: bash
+services:
+- docker
+env:
+  global:
+  - DOCKER_VERSION=1.11.2-0~trusty
+  - QUAY_ORG=${TRAVIS_REPO_SLUG%/*}
+  - QUAY_REPO=${TRAVIS_REPO_SLUG##*-}
+  - QUAY_TAG=${TRAVIS_TAG:-${TRAVIS_COMMIT:0:7}}
+before_install:
+- apt-cache madison docker-engine
+- sudo apt-get -o Dpkg::Options::="--force-confnew" install -y docker-engine=${DOCKER_VERSION}
+install:
+- echo quay.io/${QUAY_ORG}/${QUAY_REPO}:${QUAY_TAG}
+- docker build -t quay.io/${QUAY_ORG}/${QUAY_REPO}:${QUAY_TAG} .
+before_deploy:
+- docker login -p "${QUAY_PASSWORD}" -u "${QUAY_USER}" quay.io
+deploy:
+- provider: script
+  script: .travis/deploy.sh
+  skip_cleanup: true
+  on:
+    branch: master
+- provider: script
+  script: .travis/deploy.sh
+  skip_cleanup: true
+  on:
+    tags: true
+notifications:
+  slack:
+    secure: OWtdv8Y+Tw+6rPyot67QYeysErhnlNGDogZR7UuaXJXXLCQpqKe7S88Vv6duTlOSY8e0990fDCLcSD7o+YDgFha1bPCtbs7Z8pmMXcMQWGs9v1jJkBZUoElHmT0GXa/eOIEdJQrMSnJt3zn7AyR7Lkt+1mLm0BghUxXnnDDmSE52wJfvWI9qDCl6Vy1Vw13qRE6ydr24kCZM6Gv/q+0g9ixSSPpePrJXxq/Rm34D7Pk6V4n5xGA1cO905hoP9UAIqbhIRpUG5fh6efWCgAv7eqaN00UJIxnj7jqZrFbUCEyFXkAQTsxzIrtltRuKVv5n/iqU+NdNY1zoKTaKPsoa2zlSoFcPCd9LFvGzlaYlOrWYgHFcbaCp2eYs35+8h51/kU6NgryLRk8WzwA1clSJoYCBw7C6oKN0MaXn4NpdD7Q37vkYWovYAzEk2bHtepRuaA9irvHCbBPMmWc+KbZUPaZjyiXSudCHx92a0Sx2UgIULh1KkkYFpLxHGWskh6escxi7nlMQMNFNGVJM0yoBLD+HJAUlgWpJCAMkzKU6+xcPaDPNdcoCMV/2Rhj4pzB0dkLpWA5o0PF2nCIEpBL0ducg1Dl+g5FKEfCjG/8CaFp7Xj4iTwYirZdcXzWQ5B8INkF+/xsASxKJb8oIHKw8pn3/zt/vcD5biCXsivXxyj4=
