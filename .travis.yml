@@ -12,7 +12,8 @@ env:
 before_install:
 - apt-cache madison docker-engine
 - sudo apt-get -o Dpkg::Options::="--force-confnew" install -y docker-engine=${DOCKER_VERSION}
-- curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+- curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname
+  -s`-`uname -m` > docker-compose
 - chmod +x docker-compose
 - sudo mv -f docker-compose /usr/local/bin
 install:
@@ -34,4 +35,4 @@ deploy:
     tags: true
 notifications:
   slack:
-    secure: vuctz+Zg60g/Z/apiVr+TpkbBWNKbimmgdvU8jwHT/+kNUPWCkw0v7PFghbiLgfLRg7o4YpsOqhJ2I6uNaJ0LKLGtnuqqbmzAcNSbXblzAhylOg7VxJ594qQMnBVv0W5JtzoAPakmAbOa/9NCYIObzijsLzS8IvfsES1V364mdbsDIkLqg9GshaImq+ABEJU4Q3m559eEP7wjtaxV9HyqY35/ZIcLxJJ6omwbLpZxZBQMISj1wUssTR1wKpDH+CvEh2ZVvhAZuaSFZ+RbohY3tGsYzuczczeBvqPR7ifcc7YkgTCvvSoelAQsxMefk/5PtyJHVxCC8Xi2QM6I18Agoaq7h+NaMI+wNrlxmjyAEiQO4YE3N0C4+JKroM6BgPOiIlCKcLn9x7cT4BPSCe2BwojyB7Lj5Sj7YHelCMZd1FDYZVyjb1BRgdWOvMQziiGPKC9kuB4tM8E9iMENMqi5/yqEZoKTVI4OyYaYW0ESwLrVLG/yJZKFpC4VD96mbZ119iFMgSn6ZxHrulARbWkBhMrDjurkzZxrVtZfF+sWuRdl4hDvdTW2IJxdfJDXZJhoC1CveaqcYtieuUuNhv9uxUIogVNTUM1V42fNanwEA0AtmMW/o7HedMHFMTmm68DE1JM75lpfScdzbEJEgHyW7bCrY4kvpisDBs96x7JCXI=
+    secure: XtFSZqWhwopqwamSjvrPq/mu5PrBXSHd2YFonz7KvtEc4MkxwXaKd0U9dECKBMN9pWkt7GAWowPDDK2jZSn2+TZJAdcfVzplkCs/0392X5jTbM//xM/KjH48gwexJ5eGqj850ljA2lIugBuTWu+s7TsXiHOeSYNsoAc+tk+Y8aSX6ebci1lSQwdx/v/ySR3GJn/MTNE6TdVWo7MUH/ENdZctBRyHzLSdUokiAAEob3eSm78HGHTFRq8iWHvi+j2cBzycSOAObYfBsVisTklO+Q85Fwf8mYgxt19ZSgn3DD6znCbcOW9w4OlgD+cgY8WiCa01vGXSDG8H5miNeJC5j3+0VTWGSpYirZ+0mfL3VBxG+RCRWxjoeYD21Dnx48fS34BXOdyYthUe5MsUdBbEYHO9IFBecH1d93xpfoz3052azGeaPZWLZYNs+umr8LZrDFx3IAzGiK35rQMA6y6AbX6J1VAAArUuGr8RoxPpD7gQgsE37kcOKZEYl2uVqIEL5v6cSQCrCSTuIH+ON4Alxz48nCIq7751g3tpGeP5+svNd896358H+DBGA/Od96QSwIq4g9M7DiVzuf2tn81lbqD8oWEohrpfpnv+vbAvX9JV97u9tLQorrWApcetu+n2R4eQY5mhBa4IEE+yWe27A1YtJhE+NC1xuXGSYMh5t9s=
