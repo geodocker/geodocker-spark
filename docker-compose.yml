@@ -1,0 +1,15 @@
+version: '2'
+services:
+    spark-master:
+        image: quay.io/geodocker/spark:latest
+        command: master
+        ports:
+          - 4040:4040
+          - 8080:8080
+    spark-worker:
+        image: quay.io/geodocker/spark:latest
+        command: worker
+        environment:
+          SPARK_MASTER: spark-master
+        depends_on:
+          - spark-master

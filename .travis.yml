@@ -5,28 +5,33 @@ services:
 env:
   global:
   - DOCKER_VERSION=1.11.2-0~trusty
-  - QUAY_ORG=${TRAVIS_REPO_SLUG%/*}
-  - QUAY_REPO=${TRAVIS_REPO_SLUG##*-}
-  - QUAY_TAG=${TRAVIS_TAG:-${TRAVIS_COMMIT:0:7}}
+  - DOCKER_COMPOSE_VERSION=1.8.0-rc2
+  - ORG=${TRAVIS_REPO_SLUG%/*}
+  - REPO=${TRAVIS_REPO_SLUG##*-}
+  - TAG=${TRAVIS_TAG:-${TRAVIS_COMMIT:0:7}}
 before_install:
 - apt-cache madison docker-engine
 - sudo apt-get -o Dpkg::Options::="--force-confnew" install -y docker-engine=${DOCKER_VERSION}
+- curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+- chmod +x docker-compose
+- sudo mv -f docker-compose /usr/local/bin
 install:
-- echo quay.io/${QUAY_ORG}/${QUAY_REPO}:${QUAY_TAG}
-- docker build -t quay.io/${QUAY_ORG}/${QUAY_REPO}:${QUAY_TAG} .
+- make -e build
+script:
+- make -e test
 before_deploy:
 - docker login -p "${QUAY_PASSWORD}" -u "${QUAY_USER}" quay.io
 deploy:
 - provider: script
-  script: .travis/deploy.sh
+  script: make -e publish
   skip_cleanup: true
   on:
     branch: master
 - provider: script
-  script: .travis/deploy.sh
+  script: make -e publish
   skip_cleanup: true
   on:
     tags: true
 notifications:
   slack:
-    secure: OWtdv8Y+Tw+6rPyot67QYeysErhnlNGDogZR7UuaXJXXLCQpqKe7S88Vv6duTlOSY8e0990fDCLcSD7o+YDgFha1bPCtbs7Z8pmMXcMQWGs9v1jJkBZUoElHmT0GXa/eOIEdJQrMSnJt3zn7AyR7Lkt+1mLm0BghUxXnnDDmSE52wJfvWI9qDCl6Vy1Vw13qRE6ydr24kCZM6Gv/q+0g9ixSSPpePrJXxq/Rm34D7Pk6V4n5xGA1cO905hoP9UAIqbhIRpUG5fh6efWCgAv7eqaN00UJIxnj7jqZrFbUCEyFXkAQTsxzIrtltRuKVv5n/iqU+NdNY1zoKTaKPsoa2zlSoFcPCd9LFvGzlaYlOrWYgHFcbaCp2eYs35+8h51/kU6NgryLRk8WzwA1clSJoYCBw7C6oKN0MaXn4NpdD7Q37vkYWovYAzEk2bHtepRuaA9irvHCbBPMmWc+KbZUPaZjyiXSudCHx92a0Sx2UgIULh1KkkYFpLxHGWskh6escxi7nlMQMNFNGVJM0yoBLD+HJAUlgWpJCAMkzKU6+xcPaDPNdcoCMV/2Rhj4pzB0dkLpWA5o0PF2nCIEpBL0ducg1Dl+g5FKEfCjG/8CaFp7Xj4iTwYirZdcXzWQ5B8INkF+/xsASxKJb8oIHKw8pn3/zt/vcD5biCXsivXxyj4=
+    secure: vuctz+Zg60g/Z/apiVr+TpkbBWNKbimmgdvU8jwHT/+kNUPWCkw0v7PFghbiLgfLRg7o4YpsOqhJ2I6uNaJ0LKLGtnuqqbmzAcNSbXblzAhylOg7VxJ594qQMnBVv0W5JtzoAPakmAbOa/9NCYIObzijsLzS8IvfsES1V364mdbsDIkLqg9GshaImq+ABEJU4Q3m559eEP7wjtaxV9HyqY35/ZIcLxJJ6omwbLpZxZBQMISj1wUssTR1wKpDH+CvEh2ZVvhAZuaSFZ+RbohY3tGsYzuczczeBvqPR7ifcc7YkgTCvvSoelAQsxMefk/5PtyJHVxCC8Xi2QM6I18Agoaq7h+NaMI+wNrlxmjyAEiQO4YE3N0C4+JKroM6BgPOiIlCKcLn9x7cT4BPSCe2BwojyB7Lj5Sj7YHelCMZd1FDYZVyjb1BRgdWOvMQziiGPKC9kuB4tM8E9iMENMqi5/yqEZoKTVI4OyYaYW0ESwLrVLG/yJZKFpC4VD96mbZ119iFMgSn6ZxHrulARbWkBhMrDjurkzZxrVtZfF+sWuRdl4hDvdTW2IJxdfJDXZJhoC1CveaqcYtieuUuNhv9uxUIogVNTUM1V42fNanwEA0AtmMW/o7HedMHFMTmm68DE1JM75lpfScdzbEJEgHyW7bCrY4kvpisDBs96x7JCXI=
