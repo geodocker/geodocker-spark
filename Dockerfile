@@ -8,7 +8,7 @@ ENV PATH $PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
 
 RUN set -x \
     && mkdir -p $SPARK_HOME $SPARK_CONF_DIR \
-    && curl -sS -# http://d3kbcqa49mib13.cloudfront.net/spark-1.6.1-bin-hadoop2.6.tgz \
+    && curl -sS -# http://d3kbcqa49mib13.cloudfront.net/spark-2.0.0-bin-hadoop2.7.tgz \
     | tar -xz -C ${SPARK_HOME} --strip-components=1
 
 COPY ./fs /
