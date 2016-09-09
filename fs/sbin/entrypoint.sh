@@ -2,7 +2,7 @@
 set -eo pipefail
 
 # Run in all cases
-if [[ ! -v ${HADOOP_MASTER_ADDRESS} ]]; then
+if [ ! -v ${HADOOP_MASTER_ADDRESS} ]; then
   source /sbin/hdfs-lib.sh
   
   template $HADOOP_CONF_DIR/core-site.xml
