@@ -1,12 +1,13 @@
 #! /usr/bin/env bash
 set -eo pipefail
-source /sbin/hdfs-lib.sh
-
-template $HADOOP_CONF_DIR/core-site.xml
-template $HADOOP_CONF_DIR/hdfs-site.xml
 
 # Run in all cases
 if [[ ! -v ${HADOOP_MASTER_ADDRESS} ]]; then
+  source /sbin/hdfs-lib.sh
+  
+  template $HADOOP_CONF_DIR/core-site.xml
+  template $HADOOP_CONF_DIR/hdfs-site.xml
+  
   sed -i.bak "s/{HADOOP_MASTER_ADDRESS}/${HADOOP_MASTER_ADDRESS}/g" ${HADOOP_CONF_DIR}/core-site.xml
 fi
 
